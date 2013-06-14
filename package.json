@@ -1,0 +1,23 @@
+{
+  "name": "quizbowl",
+  "version": "0.0.0",
+  "description": "Sharad likes Nicki Minaj",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sharadmv/quizbowl2.git"
+  },
+  "author": "Iris Wang",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "04cf7741ae32ec8827ddc500b05bb796ef20706e",
+  "bugs": {
+    "url": "https://github.com/sharadmv/quizbowl2/issues"
+  },
+  "dependencies": {
+    "express": "3.x"
+  }
+}

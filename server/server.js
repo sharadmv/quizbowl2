@@ -5,7 +5,7 @@ var init = function(qb) {
   var express = require('express');
   var app = express();
   app.set("view engine", "jade");
-  app.set("views", __dirname + "/views");
+  app.set("views", __dirname + "/../views");
 
   app.get('/', function(req, res) {
     res.render('index');
@@ -20,7 +20,7 @@ var init = function(qb) {
     listen : function() {
       var port = process.env.PORT || ports[qb.tier];
       app.listen(port);
-      qb.log(TAG, 'Listening on port '+port);
+      qb.log(TAG, "Listening on port "+port);
     }
   }
 }

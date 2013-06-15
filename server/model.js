@@ -9,8 +9,12 @@ var Models = {
   User : sequelize.define("User", {
     username : Sequelize.STRING,
     password : Sequelize.STRING,
+    isAdmin : Sequelize.BOOLEAN,
   }, {
     tableName : "user"
+  }),
+  Post : sequelize.define("Post", {
+
   }),
   Tournament : sequelize.define("Tournament", {
     year : Sequelize.INTEGER,

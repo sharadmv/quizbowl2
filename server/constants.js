@@ -2,7 +2,8 @@ var init = function(qb) {
   var interface = {
     tier : {
       TEST : "test",
-      BETA : "beta"
+      BETA : "beta",
+      RELEASE : "release"
     },
     tag : {
       SERVER : "SERVER"

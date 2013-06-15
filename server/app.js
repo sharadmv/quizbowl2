@@ -19,6 +19,7 @@ qb.server = server;
 var tier = {
   "test" : qb.constants.tier.TEST,
   "beta" : qb.constants.tier.BETA,
+  "release" : qb.constants.tier.RELEASE,
 }
 
 //Setting up global variables

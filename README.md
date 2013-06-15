@@ -1,1 +1,1 @@
-Sharad likes Nicki Minaj
+Sharad likes Nicki Minaj and Justin Bieber.

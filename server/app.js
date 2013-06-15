@@ -9,8 +9,8 @@ var qb = this;
 var constants = require('./constants.js')(qb);
 qb.constants = constants;
 
-var model = require('./model.js')(qb);
-qb.model = model;
+//var model = require('./model.js')(qb);
+//qb.model = model;
 
 var server = require('./server.js')(qb);
 qb.server = server;

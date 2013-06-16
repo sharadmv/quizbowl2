@@ -6,6 +6,10 @@ var constants = {
   },
   tag : {
     SERVER : "SERVER"
+  },
+  api : {
+    SUCCESS : "success",
+    FAILURE : "failure"
   }
 }
 module.exports = constants;

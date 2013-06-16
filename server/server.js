@@ -25,7 +25,21 @@ app.configure(function() {
   app.use(auth.session());
 });
 
-app.get('/', function(req, res) {
+express.response.wrap = function(res) {
+  var start = new Date().getTime();
+  return {
+    json : function(message) {
+      res.json(new util.api.Response(
+        message.data,
+        message.error,
+        message.status,
+        start,
+        new Date().getTime()
+      ));
+    }
+  }
+}
+app.get('/', isAdmin, function(req, res) {
   res.render('index');
 });
 
@@ -45,11 +59,33 @@ app.post('/login', auth.authenticate('local', {
   }
 );
 
-function ensureAuthenticated(req, res, next) {
+app.get('/api/user/:id', routes.api.user.get);
+app.get('/api/user', routes.api.user.all);
+app.get('/api/user/', routes.api.user.all);
+app.post('/api/user/', routes.api.user.create);
+app.put('/api/user/', routes.api.user.update);
+
+app.get('/api/post/:id', routes.api.post.get);
+
+function isAuthed(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
   res.redirect('/login')
+}
+
+function isUser(req, res, next) {
+  if (req.isAuthenticated() && req.user.id == req.params.id) {
+    return next();
+  }
+  res.send(401);
+}
+
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.isAdmin) {
+    return next();
+  }
+  res.send(401);
 }
 
 var ports = {

@@ -8,13 +8,15 @@ var DB_CONFIG = JSON.parse(fs.readFileSync(__dirname+'/../../dbconfig.json'));
 var TAG = "MODEL";
 
 var sequelize = new Sequelize(DB_CONFIG.database, DB_CONFIG.user, DB_CONFIG.password, {
-  logging : false
-});
-
+  logging : false });
 var Models = {
   User : sequelize.define("User", {
-    username : Sequelize.STRING,
+    username : {
+      type : Sequelize.STRING,
+      unique : true
+    },
     password : Sequelize.STRING,
+    email : Sequelize.STRING,
     isAdmin : Sequelize.BOOLEAN,
   }, {
     tableName : "user",
@@ -29,9 +31,10 @@ var Models = {
       }
     },
     classMethods : {
-      buildUser : function(username, password, isAdmin, callback) {
+      buildUser : function(username, password, email, isAdmin, callback) {
         return this.build({
           username : username,
+          email : email,
           password : bcrypt.hashSync(password, 10),
           isAdmin : isAdmin
         });
@@ -49,6 +52,11 @@ var Models = {
     date : Sequelize.DATE,
   }, {
     tableName : "comment"
+  }),
+  Tag : sequelize.define("Tag", {
+    text : Sequelize.STRING,
+  }, {
+    tableName : "tag"
   }),
   Tournament : sequelize.define("Tournament", {
     year : Sequelize.INTEGER,
@@ -84,6 +92,8 @@ Models.Post.belongsTo(Models.User);
 Models.User.hasMany(Models.Post);
 Models.Comment.belongsTo(Models.Post);
 Models.Post.hasMany(Models.Comment);
+Models.Tag.belongsTo(Models.Post);
+Models.Post.hasMany(Models.Tag);
 Models.Comment.belongsTo(Models.User);
 Models.User.hasMany(Models.Comment);
 
@@ -97,7 +107,7 @@ Models.Tossup.belongsTo(Models.Difficulty);
 sequelize.sync({force:true}).done(function() {
   async.auto({
     user : function(callback) {
-      var sharad = Models.User.buildUser("sharad", "sharad", true, function() {});
+      var sharad = Models.User.buildUser("sharad", "sharad", "sharad.vikram@gmail.com", true, function() {});
       sharad.save().success(function(user) {
         callback(null, user);
       });
@@ -129,6 +139,13 @@ sequelize.sync({force:true}).done(function() {
         date : new Date()
       }).save().success(function(comment) {
         callback(null, comment);
+      });
+    }],
+    tag: ['post', function(callback, results) {
+      var tag = Models.Tag.build({
+        text : "awesome",
+      }).save().success(function(tag) {
+        tag.setPost(results.post);
       });
     }],
     setUserComment : ['user', 'comment', function(callback, results) {

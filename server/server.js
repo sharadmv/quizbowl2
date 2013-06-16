@@ -51,7 +51,7 @@ app.get('/login', function(req, res) {
   }
 });
 
-app.post('/login', auth.authenticate('local', {
+app.post('/api/login', auth.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
   }), function(req, res) {
@@ -59,6 +59,7 @@ app.post('/login', auth.authenticate('local', {
   }
 );
 
+app.get('/api/user/me', routes.api.user.me);
 app.get('/api/user/:id', routes.api.user.get);
 app.get('/api/user', routes.api.user.all);
 app.get('/api/user/', routes.api.user.all);
@@ -66,6 +67,8 @@ app.post('/api/user/', routes.api.user.create);
 app.put('/api/user/', routes.api.user.update);
 
 app.get('/api/post/:id', routes.api.post.get);
+app.get('/api/post', routes.api.post.all);
+app.get('/api/post/', routes.api.post.all);
 
 function isAuthed(req, res, next) {
   if (req.isAuthenticated()) {

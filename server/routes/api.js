@@ -6,6 +6,15 @@ var SUCCESS = require('../lib/constants').api.SUCCESS;
 var FAILURE = require('../lib/constants').api.FAILURE;
 
 exports.user = {
+  me : function(req, res) {
+    if (req.user) {
+      req.params.id = req.user.id;
+      exports.user.get(req, res);
+    } else {
+      res = res.wrap(res);
+      res.json(new util.api.Message(null, "Not logged in", FAILURE));
+    }
+  },
   get : function(req, res) {
     res = res.wrap(res);
     model.User.find({
@@ -32,7 +41,7 @@ exports.user = {
     });
   },
   update : function(req, res) {
-
+    //TODO implement this
   },
   create : function(req, res) {
     res = res.wrap(res);
@@ -75,7 +84,13 @@ exports.post = {
         model.Post.find({
           where : { id : req.params.id },
         }).success(function(post) {
-          callback(null, post);
+          if (post == null) {
+            callback({ code : "Post not found" }, null);
+          } else {
+            callback(null, post);
+          }
+        }).failure(function(error) {
+          callback(error, null);
         });
       },
       tags : ['post', function(callback, results) {
@@ -90,15 +105,23 @@ exports.post = {
       }],
       response : ['tags', 'comments', 'post', function(callback, results) {
         var post = results.post;
-        if (post) {
-          post = post.values;
-          post.tags = results.tags;
-          post.comments = results.comments;
-          res.json(new util.api.Message(post, null, SUCCESS));
-        } else {
-          res.json(new util.api.Message(null, "Post not found", FAILURE));
-        }
+        post = post.values;
+        post.tags = results.tags;
+        post.comments = results.comments;
+        res.json(new util.api.Message(post, null, SUCCESS));
       }]
+    }, function(error) {
+      res.json(new util.api.Message(null, error.code, FAILURE));
     })
+  },
+  all : function(req, res) {
+    res = res.wrap(res);
+    model.Post.findAll({
+      include : [model.Tag]
+    }).success(function(posts) {
+      res.json(new util.api.Message(posts, null, SUCCESS));
+    }).failure(function(error) {
+      res.json(new util.api.Message(null, error.code, SUCCESS));
+    });
   }
 }

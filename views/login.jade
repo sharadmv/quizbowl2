@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1.
+    Login
+  form(action='/login',method='POST')
+    input(name='username')
+    input(name='password',type='password')
+    input(type='submit')

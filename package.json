@@ -21,7 +21,11 @@
     "express": "3.x",
     "mysql": "*",
     "sequelize": "*",
-    "jade" : "*"
+    "jade" : "*",
+    "passport" : "*",
+    "passport-local" : "*",
+    "bcrypt" : "*",
+    "async" : "*"
   },
   "engines": {
     "node": "0.10.x",

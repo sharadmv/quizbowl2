@@ -18,7 +18,7 @@ exports.user = {
   get : function(req, res) {
     res = res.wrap(res);
     model.User.find({
-      attributes : ['username', 'id'],
+      attributes : ['username', 'id', 'isAdmin'],
       where : { id : req.params.id }
     }).success(function(user) {
       if (user) {
@@ -33,7 +33,7 @@ exports.user = {
   all : function(req, res) {
     res = res.wrap(res);
     model.User.findAll({
-      attributes : ['username', 'id']
+      attributes : ['username', 'id', 'isAdmin']
     }).success(function(users) {
       res.json(new util.api.Message(users, null, SUCCESS));
     }).failure(function(error) {

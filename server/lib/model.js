@@ -1,7 +1,7 @@
 var fs = require("fs");
 var Sequelize = require("sequelize");
 var async = require("async")
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcrypt-nodejs");
 
 var DB_CONFIG = JSON.parse(fs.readFileSync(__dirname+'/../../dbconfig.json'));
 
@@ -26,7 +26,7 @@ var Models = {
       },
       updatePassword : function(password) {
         return this.updateAttributes({
-          password : bcrypt.hashSync(password, 10)
+          password : bcrypt.hashSync(password)
         })
       }
     },
@@ -35,7 +35,7 @@ var Models = {
         return this.build({
           username : username,
           email : email,
-          password : bcrypt.hashSync(password, 10),
+          password : bcrypt.hashSync(password),
           isAdmin : isAdmin
         });
       }

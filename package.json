@@ -24,7 +24,7 @@
     "jade" : "*",
     "passport" : "*",
     "passport-local" : "*",
-    "bcrypt" : "*",
+    "bcrypt-nodejs" : "*",
     "async" : "*",
     "nodemailer" : "*"
   },

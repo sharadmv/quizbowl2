@@ -19,6 +19,7 @@ var search = function(options, callback) {
   var query = QUERY;
   var args = [];
   for (var key in options) {
+    console.log(key);
   }
   if (options.sort) {
     if (options.sort == "random") {

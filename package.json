@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/sharadmv/quizbowl2.git"
   },
-  "author": "Iris Wang",
+  "author": "Sharad Vikram",
   "license": "BSD",
   "readmeFilename": "README.md",
   "gitHead": "04cf7741ae32ec8827ddc500b05bb796ef20706e",
@@ -26,7 +26,8 @@
     "passport-local" : "*",
     "bcrypt-nodejs" : "*",
     "async" : "*",
-    "nodemailer" : "*"
+    "nodemailer" : "*",
+    "limestone" : "*"
   },
   "engines": {
     "node": "0.10.x",

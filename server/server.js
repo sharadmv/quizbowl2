@@ -69,6 +69,11 @@ app.put('/api/user/', routes.api.user.update);
 app.get('/api/post/:id', routes.api.post.get);
 app.get('/api/post', routes.api.post.all);
 app.get('/api/post/', routes.api.post.all);
+app.post('/api/post/', routes.api.post.create);
+
+app.get('/api/tossup/:id', routes.api.tossup.get);
+
+app.get('/api/service/:name', routes.api.service);
 
 function isAuthed(req, res, next) {
   if (req.isAuthenticated()) {

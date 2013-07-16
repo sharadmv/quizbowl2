@@ -2,14 +2,14 @@ var fs = require("fs");
 var Sequelize = require("sequelize");
 var async = require("async")
 var bcrypt = require("bcrypt-nodejs");
-
-var DB_CONFIG = JSON.parse(fs.readFileSync(__dirname+'/../../dbconfig.json'));
+var CONFIG = require('../config').DB.development;
 
 var TAG = "MODEL";
 
-var sequelize = new Sequelize(DB_CONFIG.database, DB_CONFIG.user, DB_CONFIG.password, {
+var sequelize = new Sequelize(CONFIG.database, CONFIG.user, CONFIG.password, {
   logging : false });
 var Models = {
+  Sequelize : sequelize,
   User : sequelize.define("User", {
     username : {
       type : Sequelize.STRING,
@@ -84,7 +84,8 @@ var Models = {
     answer : Sequelize.TEXT,
     number : Sequelize.INTEGER,
   }, {
-    tableName : "tossup"
+    tableName : "tossup",
+    engine : "myisam"
   })
 }
 
@@ -104,8 +105,20 @@ Models.Tossup.belongsTo(Models.Round);
 Models.Tossup.belongsTo(Models.Category);
 Models.Tossup.belongsTo(Models.Difficulty);
 
-sequelize.sync({force:true}).done(function() {
-  async.auto({
+sequelize.sync().done(function() {
+    var sharad = Models.User.buildUser("sharad", "sharad", "sharad.vikram@gmail.com", true, function() {});
+    sharad.save().success(function(user) {
+    }).error(function() {
+
+    });
+    Models.Post.build({
+      text : "Hi",
+      title : "Hello",
+      id : 1,
+      userId : 1
+    }).save().success(function(post) {
+    }).error(function(){})
+  /*async.auto({
     user : function(callback) {
       var sharad = Models.User.buildUser("sharad", "sharad", "sharad.vikram@gmail.com", true, function() {});
       sharad.save().success(function(user) {
@@ -169,7 +182,7 @@ sequelize.sync({force:true}).done(function() {
       })
     }]
   }, function(err, result) {
-  });
+  });*/
 });
 
 module.exports = Models;

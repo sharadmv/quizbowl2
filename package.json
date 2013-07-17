@@ -27,7 +27,6 @@
     "bcrypt-nodejs" : "*",
     "async" : "*",
     "nodemailer" : "*",
-    "limestone" : "*"
   },
   "engines": {
     "node": "0.10.x",

@@ -27,6 +27,7 @@
     "bcrypt-nodejs" : "*",
     "async" : "*",
     "nodemailer" : "*",
+    "memcached" : "*"
   },
   "engines": {
     "node": "0.10.x",

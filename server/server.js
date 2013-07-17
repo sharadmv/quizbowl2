@@ -110,7 +110,7 @@ var ports = {
 
 module.exports = {
   listen : function() {
-    var port = process.env.PORT || ports[qb.tier];
+    var port = process.env.PORT || ports[qb.TIER];
     app.listen(port);
     LOG.i("Listening on port "+port);
   }

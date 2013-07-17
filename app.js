@@ -1,5 +1,5 @@
 /**
- * Entry point for qblication
+ * Entry point for application
  */
 
 //Requiring modules
@@ -15,7 +15,7 @@ var tier = {
 }
 
 //Setting up global variables
-exports.tier = tier[process.argv[2]] || tier.test;
+exports.TIER = tier[process.argv[2]] || tier.test;
 
 
 //Starting server

@@ -8,8 +8,8 @@ var util = require('../lib/util');
 var TAG = "MODEL";
 var LOG = util.log(TAG);
 
-var sequelize = new Sequelize(CONFIG.database, CONFIG.user, CONFIG.password, {
-  logging : false });
+var sequelize = new Sequelize(CONFIG.database, CONFIG.username, CONFIG.password, {
+  logging : LOG.d });
 var Models = {
   Sequelize : sequelize,
   User : sequelize.define("User", {

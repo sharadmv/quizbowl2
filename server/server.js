@@ -9,6 +9,7 @@ var routes = {
 }
 
 var TAG = "SERVER";
+var LOG = util.log(TAG);
 
 var app = express();
 
@@ -23,6 +24,10 @@ app.configure(function() {
 
   app.use(auth.initialize());
   app.use(auth.session());
+  app.use(function(req, res, next){
+    LOG.d(req.method, req.url);
+    next();
+  });
 });
 
 express.response.wrap = function(res) {
@@ -39,6 +44,7 @@ express.response.wrap = function(res) {
     }
   }
 }
+
 app.get('/', isAdmin, function(req, res) {
   res.render('index');
 });
@@ -106,6 +112,6 @@ module.exports = {
   listen : function() {
     var port = process.env.PORT || ports[qb.tier];
     app.listen(port);
-    util.log(TAG, "Listening on port "+port);
+    LOG.i("Listening on port "+port);
   }
 }

@@ -3,8 +3,10 @@ var Sequelize = require("sequelize");
 var async = require("async")
 var bcrypt = require("bcrypt-nodejs");
 var CONFIG = require('../config').DB.development;
+var util = require('../lib/util');
 
 var TAG = "MODEL";
+var LOG = util.log(TAG);
 
 var sequelize = new Sequelize(CONFIG.database, CONFIG.user, CONFIG.password, {
   logging : false });
@@ -106,83 +108,7 @@ Models.Tossup.belongsTo(Models.Category);
 Models.Tossup.belongsTo(Models.Difficulty);
 
 sequelize.sync().done(function() {
-    var sharad = Models.User.buildUser("sharad", "sharad", "sharad.vikram@gmail.com", true, function() {});
-    sharad.save().success(function(user) {
-    }).error(function() {
-
-    });
-    Models.Post.build({
-      text : "Hi",
-      title : "Hello",
-      id : 1,
-      userId : 1
-    }).save().success(function(post) {
-    }).error(function(){})
-  /*async.auto({
-    user : function(callback) {
-      var sharad = Models.User.buildUser("sharad", "sharad", "sharad.vikram@gmail.com", true, function() {});
-      sharad.save().success(function(user) {
-        callback(null, user);
-      });
-    },
-    post : ['user', function(callback, results) {
-      Models.Post.build({
-        text : "Hi",
-        title : "Hello"
-      }).save().success(function(post) {
-        callback(null, post);
-      })
-    }],
-    setUser : ['user', 'post', function(callback, results) {
-      results.post.setUser(results.user).success(function(post) {
-        callback(null, post);
-      })
-    }],
-    comment : ['post', function(callback, results) {
-      var comment = Models.Comment.build({
-        text : "dere",
-        date : new Date()
-      }).save().success(function(comment) {
-        callback(null, comment);
-      });
-    }],
-    comment2 : ['post', function(callback, results) {
-      var comment = Models.Comment.build({
-        text : "whaaaat",
-        date : new Date()
-      }).save().success(function(comment) {
-        callback(null, comment);
-      });
-    }],
-    tag: ['post', function(callback, results) {
-      var tag = Models.Tag.build({
-        text : "awesome",
-      }).save().success(function(tag) {
-        tag.setPost(results.post);
-      });
-    }],
-    setUserComment : ['user', 'comment', function(callback, results) {
-      results.comment.setUser(results.user).success(function(comment) {
-        callback(null, comment);
-      })
-    }],
-    setPostComment : ['post','comment', function(callback, results) {
-      results.comment.setPost(results.post).success(function(comment) {
-        callback(null, comment);
-      })
-    }],
-    setUserComment2 : ['user', 'comment2', function(callback, results) {
-      results.comment2.setUser(results.user).success(function(comment) {
-        callback(null, comment);
-      })
-    }],
-    setPostComment2 : ['post','comment2', function(callback, results) {
-      results.comment2.setPost(results.post).success(function(comment) {
-        callback(null, comment);
-      })
-    }]
-  }, function(err, result) {
-  });*/
+  LOG.i("Connected to MySQL");
 });
 
 module.exports = Models;

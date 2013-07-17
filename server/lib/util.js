@@ -11,10 +11,33 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
 });
 
 var util = {
-  log : function(tag, message) {
-    var log = Array.prototype.slice.call(arguments)
-    log[0] = "["+log[0]+"]: ";
-    console.log.apply(null, log);
+  log : function(tag) {
+    return {
+      d : function(message) {
+        var log = Array.prototype.slice.call(arguments)
+        util.logger("DEBUG", tag, log);
+      },
+      i : function(message) {
+        var log = Array.prototype.slice.call(arguments)
+        util.logger("INFO", tag, log);
+      },
+      w : function(message) {
+        var log = Array.prototype.slice.call(arguments)
+        util.logger("WARNING", tag, log);
+      },
+      e : function(message) {
+        var log = Array.prototype.slice.call(arguments)
+        util.logger("ERROR", tag, log);
+      },
+      f : function(message) {
+        var log = Array.prototype.slice.call(arguments)
+        util.logger("FATAL", tag, log);
+      }
+    }
+  },
+  logger : function(level, tag, args) {
+    args.unshift("("+level+") ["+tag+"]\t");
+    console.log.apply(null, args);
   },
   generateHex : function(length, callback) {
     crypto.randomBytes(length, function(ex, buf) {

@@ -29,6 +29,7 @@ var search = function(options, callback) {
   var matchArgs = []
   var other = "";
   var otherArgs = [];
+  LOG.d(getKey(options));
   for (var key in options) {
     if (key == "difficulty") {
       match += "@difficulty ?";
@@ -86,14 +87,18 @@ var search = function(options, callback) {
   });
 }
 
-module.exports = function(options, callback) {
-  if (options.sort != "random") {
+var getKey = function(options) {
     var key = [];
     for (var i in OPTIONS) {
       var option = OPTIONS[i];
       key.push(option+":"+options[option]);
     }
-    key = key.join("&");
+    return key.join("&");
+}
+
+module.exports = function(options, callback) {
+  if (options.sort != "random") {
+    var key = getKey(options);
     mc.get(MC_TAG+"/"+key, function(err, data) {
       if (data) {
         callback(err, data);

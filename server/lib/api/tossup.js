@@ -19,7 +19,6 @@ module.exports = {
       },
       category : ['tossup', function(callback, results) {
         results.tossup.getCategory().success(function(category) {
-          console.log(category);
           callback(null, category.name);
         });
       }],

@@ -8,11 +8,10 @@ var MC_TAG = "search";
 var TAG = "SEARCH"
 var LOG = util.log(TAG);
 
-var conn = mysql.createConnection({
+var pool = mysql.createPool({
   host : CONFIG.host,
   port : CONFIG.port,
 });
-
 var QUERY = "select * from tossup";
 
 var defaults = {
@@ -82,15 +81,20 @@ var search = function(options, callback) {
   args.push(offset);
   args.push(limit);
   query = util.query(query, args);
-  conn.query(query, function(err, rows) {
-    callback(err, rows.map(function(row) {
-      row.tournament = {
-        name : row.tournament,
-        year : row.year
-      }
-      row.year = undefined;
-      return row;
-    }))
+  pool.getConnection(function(err, conn) {
+    if (err) {
+      callback(err, null);
+    }
+    conn.query(query, function(err, rows) {
+      callback(err, rows.map(function(row) {
+        row.tournament = {
+          name : row.tournament,
+          year : row.year
+        }
+        row.year = undefined;
+        return row;
+      }))
+    });
   });
 }
 

@@ -83,7 +83,14 @@ var search = function(options, callback) {
   args.push(limit);
   query = util.query(query, args);
   conn.query(query, function(err, rows) {
-    callback(err, rows)
+    callback(err, rows.map(function(row) {
+      row.tournament = {
+        name : row.tournament,
+        year : row.year
+      }
+      row.year = undefined;
+      return row;
+    }))
   });
 }
 

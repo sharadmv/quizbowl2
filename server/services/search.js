@@ -1,6 +1,9 @@
 var mysql = require('mysql');
 var util = require('../lib/util');
 var CONFIG = require('../config').DB.sphinx;
+var mc = require('../lib/memcached');
+
+var MC_TAG = "search";
 
 var TAG = "SEARCH"
 var LOG = util.log(TAG);
@@ -17,6 +20,8 @@ var defaults = {
   offset : 0,
   sort : "year"
 }
+
+var OPTIONS = ['difficulty','category','tournament','question','answer','tossup','year','sort','limit','offset']
 var search = function(options, callback) {
   var query = QUERY;
   var args = [];
@@ -81,4 +86,25 @@ var search = function(options, callback) {
   });
 }
 
-module.exports = search;
+module.exports = function(options, callback) {
+  if (options.sort != "random") {
+    var key = [];
+    for (var i in OPTIONS) {
+      var option = OPTIONS[i];
+      key.push(option+":"+options[option]);
+    }
+    key = key.join("&");
+    mc.get(MC_TAG+"/"+key, function(err, data) {
+      if (data) {
+        callback(err, data);
+      } else {
+        search(options, function(err, data) {
+          mc.set(MC_TAG+"/"+key, data);
+          callback(err, data);
+        });
+      }
+    })
+  } else {
+    search(options, callback);
+  }
+};

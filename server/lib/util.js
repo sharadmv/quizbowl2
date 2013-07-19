@@ -72,6 +72,17 @@ var util = {
       query = query.replace('?', args.shift());
     }
     return query;
+  },
+  mc : {
+    init : function(tag) {
+      return {
+        serialize : function(obj, options) {
+          return tag+"/"+options.sort().map(function(key) {
+            return key+":"+obj[key]
+          }).join("&")
+        }
+      }
+    },
   }
 }
 

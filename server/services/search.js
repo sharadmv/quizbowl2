@@ -1,17 +1,13 @@
 var mysql = require('mysql');
 var util = require('../lib/util');
-var CONFIG = require('../config').DB.sphinx;
+var sphinx = require('../lib/sphinx');
 var mc = require('../lib/memcached');
 
 var MC_TAG = "search";
 
 var TAG = "SEARCH"
+var MC = util.mc.init(TAG)
 var LOG = util.log(TAG);
-
-var conn = mysql.createConnection({
-  host : CONFIG.host,
-  port : CONFIG.port,
-});
 
 var QUERY = "select * from tossup";
 
@@ -81,8 +77,7 @@ var search = function(options, callback) {
   query += " limit ?,?";
   args.push(offset);
   args.push(limit);
-  query = util.query(query, args);
-  conn.query(query, function(err, rows) {
+  sphinx.query(query, args, function(err, rows) {
     callback(err, rows.map(function(row) {
       row.tournament = {
         name : row.tournament,
@@ -105,13 +100,13 @@ var getKey = function(options) {
 
 module.exports = function(options, callback) {
   if (options.sort != "random") {
-    var key = getKey(options);
-    mc.get(MC_TAG+"/"+key, function(err, data) {
+    mc.get(MC.serialize(options, OPTIONS), function(err, data) {
       if (data) {
-        callback(err, data);
+        callback(null, data);
       } else {
         search(options, function(err, data) {
-          mc.set(MC_TAG+"/"+key, data);
+          console.log(options, OPTIONS);
+          mc.set(MC.serialize(options, OPTIONS), data);
           callback(err, data);
         });
       }

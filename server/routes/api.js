@@ -7,7 +7,7 @@ var user = require('../lib/api/user')
 var post = require('../lib/api/post')
 var tossup = require('../lib/api/tossup')
 var services = {
-  search : require('../services/search')
+  search : require('../lib/services/search')
 }
 
 var SUCCESS = require('../lib/constants').api.SUCCESS;
@@ -107,7 +107,7 @@ exports.tossup = {
     var key = MC_TAG+"/tossup/"+req.params.id;
     mc.get(key, function(err, data) {
       if (data) {
-        res.json(new util.api.Message(data, err, SUCCESS));
+        res.json(new util.api.Message(data, null, SUCCESS));
       } else {
         tossup.get(req.params.id, function(err, tossup) {
           if (err) {

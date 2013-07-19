@@ -1,7 +1,7 @@
 var mysql = require('mysql');
-var util = require('../lib/util');
-var sphinx = require('../lib/sphinx');
-var mc = require('../lib/memcached');
+var util = require('../util');
+var sphinx = require('../sphinx');
+var mc = require('../memcached');
 
 var MC_TAG = "search";
 
@@ -78,14 +78,7 @@ var search = function(options, callback) {
   args.push(offset);
   args.push(limit);
   sphinx.query(query, args, function(err, rows) {
-    callback(err, rows.map(function(row) {
-      row.tournament = {
-        name : row.tournament,
-        year : row.year
-      }
-      row.year = undefined;
-      return row;
-    }))
+    callback(err, rows);
   });
 }
 

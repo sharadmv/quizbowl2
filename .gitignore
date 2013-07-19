@@ -2,3 +2,7 @@ node_modules/
 dbconfig.json
 tags
 server/lib/util.js
+config/*
+sphinx/data
+sphinx/searchd.pid
+quizbowl.pem

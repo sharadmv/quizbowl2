@@ -1,5 +1,5 @@
 {
   "hostname" : "localhost",
   "port" : 11211,
-  "timeout" : 15
+  "timeout" : 1800
 }

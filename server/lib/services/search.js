@@ -3,8 +3,6 @@ var util = require('../util');
 var sphinx = require('../sphinx');
 var mc = require('../memcached');
 
-var MC_TAG = "search";
-
 var TAG = "SEARCH"
 var MC = util.mc.init(TAG)
 var LOG = util.log(TAG);
@@ -98,7 +96,6 @@ module.exports = function(options, callback) {
         callback(null, data);
       } else {
         search(options, function(err, data) {
-          console.log(options, OPTIONS);
           mc.set(MC.serialize(options, OPTIONS), data);
           callback(err, data);
         });

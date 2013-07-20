@@ -3,11 +3,11 @@ var nodemailer = require("nodemailer");
 var CONFIG = require('../config').EMAIL;
 
 var smtpTransport = nodemailer.createTransport("SMTP",{
-   service: "Gmail",
-   auth: {
-       user: CONFIG.email,
-       pass: CONFIG.password
-   }
+  service: "Gmail",
+  auth: {
+    user: CONFIG.email,
+    pass: CONFIG.password
+  }
 });
 
 var util = {

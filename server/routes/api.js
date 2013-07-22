@@ -32,11 +32,19 @@ exports.user = {
   },
   get : function(req, res) {
     res = res.wrap(res);
-    user.get(req.params.id, function(err, user) {
-      if (err) {
-        res.json(new util.api.Message(null, err, FAILURE));
+    var key = MC_TAG+"/user/"+req.params.id;
+    mc.get(key, function(err, data) {
+      if (data) {
+        res.json(new util.api.Message(data, null, SUCCESS));
       } else {
-        res.json(new util.api.Message(user, null, SUCCESS));
+        user.get(req.params.id, function(err, user) {
+          if (err) {
+            res.json(new util.api.Message(null, err, FAILURE));
+          } else {
+            mc.set(key, user);
+            res.json(new util.api.Message(user, null, SUCCESS));
+          }
+        });
       }
     });
   },

@@ -9,7 +9,7 @@ def load_config():
     config = json.loads(open('../../config/db.json').read())
     return config[TIER]
 
-class MySQLData(data.Datasource):
+class Data():
 
     def __init__(self):
         config = load_config()
@@ -20,9 +20,9 @@ class MySQLData(data.Datasource):
             db=config['database']
         )
 
-    def get_data(self):
+    def get_data(self,limit=1000000000):
         cursor = self.db.cursor()
-        sql = "SELECT question, answer, categoryId, difficultyId, tournamentId, roundId, number FROM `tossup`"
+        sql = "SELECT question, answer, categoryId, difficultyId, tournamentId, roundId, number FROM `tossup` limit %d" % limit
         tossups = []
         try:
             cursor.execute(sql)

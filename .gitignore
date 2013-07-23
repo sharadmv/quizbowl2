@@ -6,3 +6,9 @@ config/*
 sphinx/data
 sphinx/searchd.pid
 quizbowl.pem
+*.pyc
+ml/bin
+ml/include
+ml/lib
+ml/local
+*.log

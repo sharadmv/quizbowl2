@@ -1,0 +1,231 @@
+/* GENERAL CODE 
+   ============ */
+
+/* Main fonts */
+@font-face {
+  font-family: 'Junction';
+  src: url('/font/Junction.eot?') format('eot'), url('/font/Junction.woff') format('woff'), url('/font/Junction.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'League';
+  src: url('/font/League.eot?') format('eot'), url('/font/League.woff') format('woff'), url('/font/League.ttf') format('truetype');
+}
+
+html, body {
+	margin:0;
+	padding:0;
+	font-family:"Junction","Segoe UI", Helvetica, "Open Sans", sans-serif;
+  font-size:13px;
+}
+
+html {
+  height:100%;
+  width:100%;
+}
+
+body {
+  background-color:transparent;
+  min-height:100%;
+  height:auto !important;
+  height:100%;
+  background-color:#dcdbff;
+  background-image: -moz-linear-gradient(top, #dcdbff, #efefef);
+  background-image: -o-linear-gradient(top, #dcdbff, #efefef);
+  background-image: -webkit-linear-gradient(top, #dcdbff, #efefef);
+  background-image: linear-gradient(top, #dcdbff, #efefef);
+  background-attachment:fixed;
+  background-repeat:no-repeat;
+}
+img {
+  vertical-align:middle;
+}
+
+/* General classes */
+.bigBox {
+  border: 10px #000438 solid;
+  background: #dcdbff;
+  -moz-box-shadow:inset 0px 0px 5px 3px #000438;
+  -o-box-shadow:inset 0px 0px 5px 3px #000438;
+  -webkit-box-shadow:inset 0px 0px 5px 3px #000438;
+  box-shadow:inset 0px 0px 5px 3px #000438;
+}
+
+/* Header/navigation styling */
+.fbLoginButtonWrapper {
+  padding-top: 21px !important;
+  padding-bottom: 21px !important;
+  height: 38px;
+  position:relative;
+  width:90px;
+}
+
+
+.fbLoginButtonImg {
+  height:1.5em;
+  top: 39px;
+  position: absolute;
+  left: 24px;
+}
+
+#fbLoginDiv {
+  position: absolute;
+  left: 48px;
+  top: 39px;
+  padding-bottom: 6px;
+  padding-top: 6px;
+  background: #3B5B99;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  height:13px;
+}
+
+#header {
+	width:100%;
+  height:60px;
+  background:#000438;
+  background-image: -moz-linear-gradient(top, #000438, #000545);
+  background-image: -o-linear-gradient(top, #000438, #000545);
+  background-image: -webkit-linear-gradient(top, #000438, #000545);
+  background-image: linear-gradient(top, #000438, #000545);
+  /*
+	background:#0A70DC;
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#0A9DFF), to(#0A72F2));
+  background-image: -moz-gradient(bottom, from(#0A01AB), to(#0A56DC));
+  background-image: -o-gradient(bottom, from(#0A01AB), to(#0A56DC))
+  */
+}
+
+#container {
+  height:100%;
+}
+
+#headerContainer {
+  width:960px;
+  margin:auto;
+  height:60px;
+}
+
+#menu { 
+	height:100%; 
+  padding:0;
+	margin:0;
+	float:right;
+}
+
+#headerLogo {
+	display:inline-block;
+  text-shadow:0px 0px 10px #00344b, 
+              0px 0px 10px #00344b,
+              0px 0px 10px #00344b;
+	font-size:3em;
+	color:#ccc;
+	line-height:60px;
+  height: 49px;
+  padding-top: 5px;
+  padding-bottom: 6px;
+}
+
+#headerImg {
+  vertical-align:middle;
+  height:40px;
+}
+
+#menu li {
+	list-style:none;
+	display:inline-block;
+  line-height:18px;
+}
+#menu a {
+  display: inline-block;
+  float: left;
+  margin: 0;
+  margin-top: -20px;
+  padding: 25px 20px 19px 20px;
+
+  text-decoration: none;
+  color: white;
+  font-size:1.3em;
+
+  background:transparent;
+  background-image: -moz-radial-gradient(center bottom, circle farthest-side, #000661 10%, #000438 100%);
+  background-image: -o-radial-gradient(center bottom, circle farthest-side, #000661 10%, #000438 100%);
+  background-image: -webkit-radial-gradient(center bottom, circle farthest-side, #000661 10%, #000438 100%);
+  background-image: radial-gradient(center bottom, circle farthest-side, #000661 10%, #000438 100%);
+
+  /* animate the background image through hacky ways yay! */
+  -moz-transition: background 0.3s ease-out;
+  -o-transition: background 0.3s ease-out;
+  -webkit-transition: background 0.3s ease-out;
+  transition: background 0.3s ease-out;
+  background-repeat:no-repeat;
+  background-size:100% 0%;
+  background-position: 200% 300%;
+}
+
+#menu a:hover {
+  background-size:100% 100%;
+}
+
+#right {
+  float : left;
+}
+
+#left {
+  float : left;
+}
+#footer {
+  height:40px;
+  background:white;
+  text-align:center;
+  line-height:40px;
+}
+
+#filterBox {
+  display:block;
+  margin:auto;
+  margin-top: 20px;
+  padding:5px;
+  height:170px;
+  width: 940px;
+  line-height: 50px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+#filterText {
+  height: 2em;
+  line-height: 3em;
+  font-size: 2em;
+  margin-left:20px;
+}
+#filter {
+  margin-top:20px;
+  display:inline-block;
+}
+#filter > div {
+  float:left;
+  line-height:100%;
+  padding-left:20px;
+}
+#tournamentBox {
+  font-size:1.2em;
+  font-weight:bold;
+  padding-bottom:6px;
+}
+#filter select {
+  width:220px;
+  vertical-align:middle;
+}
+.filterLabel {
+  display:inline-block;
+}
+#category {
+  display:inline;
+}
+#difficulty {
+  display:inline;
+}

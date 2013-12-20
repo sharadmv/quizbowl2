@@ -1,0 +1,104 @@
+#topWrapper {
+  height : 100%;
+}
+#bottomWrapper {
+  margin-bottom:-30px;
+}
+#searchBoxWrapper {
+  z-index:200;
+  width: 940px;
+  border: 10px #000438 solid;
+  line-height: 50px;
+  margin: auto;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+#searchBoxContainer {
+  width:715px;
+  margin:auto;
+  height:115px;
+}
+#searchText {
+  height:2em;
+  line-height:3em;
+  font-size:2em;
+}
+#searchBox {
+  width : 500px;
+  vertical-align:middle;
+  margin-bottom:0px;
+}
+.searchLoader {
+  width:25px;
+  vertical-align:middle;
+  height:25px;
+  visibility:hidden;
+}
+#searchButton {
+  vertical-align:middle;
+}
+.next {
+  position:relative;
+  float:right;
+}
+.previous{
+  position:relative;
+  float:left;
+}
+#topResultControl, #bottomResultControl {
+  width:100%;
+  position : relative;
+  bottom : 0px;
+  text-align:center;
+  z-index:100;
+}
+#bottomResultControl {
+  height:65px;
+  margin-bottom:20px;
+}
+
+#resultsWrapper {
+  width: 940px;
+  margin: auto;
+  background: #fff;
+  padding: 11px 10px 0px 10px;
+  border-radius: 5px;
+  margin-top:10px;
+  border:1px solid #aaa;
+  height:26px;
+}
+#results {
+}
+
+.tournament {
+  font-size:1.2em;
+  font-weight:bold;
+}
+.tossup {
+  padding-top:15px;
+  padding-bottom:15px;
+  padding-left:15px;
+  padding-right:15px;
+  margin-top:10px;
+  margin-bottom:10px;
+  font-family:Helvetica Neue, Helvetica, Arial, sans-serif
+}
+.answer {
+  font-style:italic;
+}
+.pages {
+  font-size:1.2em;
+}
+.next, .previous {
+  cursor:pointer;
+}
+.advanced {
+  cursor:pointer;
+  text-decoration:underline;
+}
+.filterLabel {
+  display : block;
+}
+#filter select {
+  width : 210px;
+}

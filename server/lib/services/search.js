@@ -72,11 +72,39 @@ var search = function(options, callback) {
   var limit = options.limit || defaults.limit;
   var offset = options.offset || defaults.offset;
   limit = parseInt(limit);
+  offset = parseInt(offset);
   query += " limit ?,?";
   args.push(offset);
   args.push(limit);
+  next = {}
+  previous = {}
+  for (var key in options) {
+      next[key] = options[key];
+      previous[key] = options[key];
+  }
+  next["offset"] = offset + limit;
+  next["limit"] = limit;
+  previous["offset"] = Math.max(0, offset - limit);
+  previous["limit"] = limit;
+  nextstring = "";
+  previousstring = "";
+  delimiter = "";
+  for (var key in next) {
+    nextstring += delimiter + key + "=" + next[key];
+    delimiter = "&";
+  }
+  delimiter = "";
+  for (var key in previous) {
+    previousstring += delimiter + key + "=" + previous[key];
+    delimiter = "&";
+  }
+  var next = "/services/search" + "";
   sphinx.query(query, args, function(err, rows) {
-    callback(err, rows);
+    callback(err, {
+        results : rows,
+        next : "/api/service/search?" + nextstring,
+        previous : "/api/service/search?" + previousstring
+    });
   });
 }
 

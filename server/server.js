@@ -2,9 +2,9 @@ var express = require("express");
 var auth = require('./lib/auth');
 var qb = require('../app');
 var util = require('./lib/util');
+var ejs = require('ejs');
+var engine = require('ejs-locals');
 var routes = {
-  user : require('./routes/user'),
-  post : require('./routes/post'),
   api : require('./routes/api'),
 }
 
@@ -14,14 +14,15 @@ var LOG = util.log(TAG);
 var app = express();
 
 app.configure(function() {
-  app.set("view engine", "jade");
+  app.engine('ejs', engine);
+  app.set("view engine", "ejs");
   app.set("views", __dirname + "/../views");
 
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.session({ secret : 'lolol' }));
-  app.use(express.static(__dirname + '../public'));
+  app.use(express.static('./public'));
 
   app.use(auth.initialize());
   app.use(auth.session());
@@ -31,24 +32,30 @@ app.configure(function() {
   });
 });
 
-express.response.wrap = function(res) {
+express.response.wrap = function(req, res) {
   var start = new Date().getTime();
   return {
     json : function(message) {
-      res.json(new util.api.Response(
+      var msg = (new util.api.Response(
         message.data,
         message.error,
         message.status,
         start,
-        new Date().getTime()
+        new Date().getTime(),
+        req.url
       ));
+      LOG.write("message")("MESSAGE", {
+        "error" : msg.error,
+        "status" : msg.status,
+        "elapsed" : msg.elapsed,
+        "start" : msg.start,
+        "end" : msg.end,
+        "url" : msg.url,
+      });
+      res.json(msg);
     }
   }
 }
-
-app.get('/', isAdmin, function(req, res) {
-  res.render('index');
-});
 
 app.get('/login', function(req, res) {
   if (req.isAuthenticated()) {
@@ -66,6 +73,20 @@ app.post('/api/login', auth.authenticate('local', {
   }
 );
 
+app.get('/', function (req, res) {
+  res.render('home', { page: 'home' });
+});
+
+app.get('/search', function (req, res) {
+  if (!req.query.params) {
+    req.query.params = {};
+  }
+  res.render('search', { page: 'search',query : req.query.params });
+});
+
+app.get('/reader', function (req, res) {
+  res.render('reader', { page: 'reader' });
+});
 app.get('/api/user/me', routes.api.user.me);
 app.get('/api/user/:id', routes.api.user.get);
 app.get('/api/user', routes.api.user.all);
@@ -79,6 +100,15 @@ app.get('/api/post/', routes.api.post.all);
 app.post('/api/post/', routes.api.post.create);
 
 app.get('/api/tossup/:id', routes.api.tossup.get);
+app.get('/api/tournament/:id', routes.api.tournament.get);
+app.get('/api/tournament/', routes.api.tournament.all);
+app.get('/api/tournament', routes.api.tournament.all);
+app.get('/api/difficulty/:id', routes.api.difficulty.get);
+app.get('/api/difficulty/', routes.api.difficulty.all);
+app.get('/api/difficulty', routes.api.difficulty.all);
+app.get('/api/category/:id', routes.api.category.get);
+app.get('/api/category/', routes.api.category.all);
+app.get('/api/category', routes.api.category.all);
 
 app.get('/api/service/:name', routes.api.service);
 

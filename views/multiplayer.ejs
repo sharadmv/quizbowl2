@@ -1,0 +1,99 @@
+<div id="holyGrailContainer">
+	<div id="game">
+    <div id="gameControlsContainer">
+      <div id="gameText">
+        <span></span>
+      </div>
+    <div id="gameNotificationText"><span></span></div>
+    <div id="gameAnswerControl">
+        <input id="gameBuzz" type="button" value="Buzz"></input>
+        <input id="gameAnswer" type="text"></input>
+        </div>
+    </div>
+	</div>
+	
+	<div id="leftWrapper">
+		<div id="lobbyWrapper">
+			<h2>Join Game</h2>
+			<div id="lobby">
+			</div>
+		</div>
+		<div id="createWrapper">
+			<h2>Create Game</h2>
+      <div id="create">
+        <div class="createField">
+          <label for="nameField">Name:</label><input type="text" id="nameField" maxlength="20" />
+        </div>
+        <div class="createField">
+          <label for="messageField">Message:</label><!--
+       --><input type="text" id="messageField" class="textField" />
+        </div>
+        <div class="createField">
+          <label for="numField">Questions:</label><!--
+       --><input type="text" id="numField" value="20" />
+        </div>
+        <div class="createField">
+          <label for="readingSpeedField">Reading Speed:</label><!--
+       --><input type="range" min="0" max="100" value="50" id="readingSpeedField" />
+        </div>
+        <div class="createField">
+          <label for="difficultyField">Difficulty:</label><!--
+       --><select id="difficultyField">
+            <option>All</option>
+            <option>College</option>
+            <option>HS</option>
+            <option>MS</option>
+          </select>
+        </div>
+        <div class="createField">
+          <label for="categoryField">Category:</label><!--
+       --><select id="categoryField">
+            <option>All</option>
+            <option>Social Science</option>
+            <option>Literature</option>
+            <option>Trash</option>
+            <option>History</option>
+            <option>Science</option>
+            <option>Mythology</option>
+            <option>Fine Arts</option>
+            <option>Religion</option>
+            <option>Philosophy</option>
+            <option>Geography</option>
+          </select>
+        </div>
+        <div class="createField">
+          <label for="presetsField">Presets:</label><!--
+         --><select id="presetsField">
+            <option>Free For All</option>
+            <option>Team</option>
+          </select>
+        </div>
+        <div class="createField">
+          <label for="">Teams:</label><!--
+       --><input id="numTeamsBox" value="10" maxlength="2">
+        </div>
+        <div class="createField">
+          <label for="">Players per Team:</label><!--
+       --><input id="numPlayersBox" value="1" maxlength="2">
+        </div>
+        <button id="createButton">Create</button>
+      </div>
+		</div>
+    <div id="leaveRoom">&lt; Leave</div>
+	</div>
+
+	<div id="rightWrapper">
+		<h2>Users</h2>
+		<div id="userlist">
+		</div>
+		<div id="roomChat">
+			<h2>Chat</h2>
+			<div id="roomChatBox">
+			</div>
+			<div id="roomChatControl">
+				<input id="roomChatMessage"></input>
+				<button id="roomChatSend">Send</button>
+			</div>
+		</div>
+	</div>
+</div>

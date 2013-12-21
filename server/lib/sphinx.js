@@ -13,11 +13,12 @@ var pool = mysql.createPool({
 
 exports.query = function(query, args, callback) {
   var query = util.query(query, args);
+  LOG.d("Getting MySQL connection");
   pool.getConnection(function(err, conn) {
     LOG.d("Executing (sphinx):", query);
     conn.query(query, function(err, rows) {
-      console.log(rows);
       callback(err, rows);
+      conn.release();
     });
   });
 }

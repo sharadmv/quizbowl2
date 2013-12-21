@@ -15,7 +15,7 @@
     }
   });
   var scope = this;
-  var BASE_URL = "/api";
+  var BASE_URL = "/api/service";
 
   var Model = {
     Question : Backbone.Model.extend({
@@ -27,16 +27,14 @@
       },
       url : function() {
         var params = filterBox.getParams();
-        var options = {
-          random : true,
-          limit : 1,
-          params : params
-        }
-        return BASE_URL+"/search/"+"?"+jQuery.param(options);
+        params.sort = "random";
+        params.limit = 1;
+        params.term = "";
+        return BASE_URL+"/search/"+"?"+jQuery.param(params);
       },
       parse : function(response) {
-        this.split = response.data.tossups[0].question.split(" ");
-        return response.data.tossups[0];
+        this.split = response.data.results[0].question.split(" ");
+        return response.data.results[0];
       },
       begin : function() {
         clearInterval(this.interval);
@@ -115,14 +113,14 @@
         answer = answer.trim();
         this.answering = false;
         var self = this;
-        var url = BASE_URL+"/service?method=answer.check&answer="+answer+"&canon="+self.get("answer");
+        var url = BASE_URL+"/check?answer="+answer+"&canon="+self.get("answer");
         $.ajax({
           url : url,
         }).done(function(response) {
           if ($("#multi").prop("checked")) {
-              self.trigger("continue", response.data.correct);
+              self.trigger("continue", response.data);
           } else {
-              self.trigger("answer", response.data.correct);
+              self.trigger("answer", response.data);
               self.reading = false;
           }
         });
@@ -361,21 +359,21 @@
     loadTournaments : function(arr) {
       $.each(arr, function(key, val) {
         $("#tournamentSelect").append(
-          "<option>"+val.year+" "+val.tournament+"</option>"
+          "<option>"+val.year+" "+val.name +"</option>"
         );
       });
     },
     loadCategories : function(arr) {
       $.each(arr, function(key, val) {
         $("#categorySelect").append(
-          "<option>"+val+"</option>"
+          "<option>"+val.name+"</option>"
         );
       });
     },
     loadDifficulties : function(arr) {
       $.each(arr, function(key, val) {
         $("#difficultySelect").append(
-          "<option>"+val+"</option>"
+          "<option>"+val.name+"</option>"
         );
       });
     },

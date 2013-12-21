@@ -22,12 +22,17 @@
     "mysql": "*",
     "sequelize": "*",
     "jade" : "*",
+    "ejs" : "*",
+    "ejs-locals" : "*",
     "passport" : "*",
     "passport-local" : "*",
     "bcrypt-nodejs" : "*",
     "async" : "*",
     "nodemailer" : "*",
-    "memcached" : "*"
+    "memcached" : "*",
+    "natural" : "*",
+    "node-xml" : "*",
+    "restler" : "*"
   },
   "engines": {
     "node": "0.10.x",

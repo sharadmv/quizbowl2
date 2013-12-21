@@ -1,0 +1,56 @@
+<% layout('layout') -%>
+<div id='readerWrapper'>
+  <div id='filterBox' class='bigBox'>
+    <div id='filterText'>Filter your questions here:</div>
+    <form id='filter'>
+      <div id="category">
+        <label class='filterLabel'>Category</label>
+        <select multiple="multiple" id="categorySelect">
+        </select>
+      </div> 
+
+      <div id="difficulty">
+        <label class='filterLabel'>Difficulty</label>
+        <select multiple="multiple" id="difficultySelect">
+        </select>
+      </div>
+
+      <div class="tournamentBox">
+        <label class='filterLabel'>Tournament</label>
+        <select multiple="multiple" id="tournamentSelect">
+        </select>
+      </div>
+    </form>
+  </div>
+  <div id='questionWrapper'>
+    <div id="readerControl">
+      <div id="readerScore">Score: <span id="readerScoreText">0</span></div>
+      <div id="readerSpeed">Reader Text Speed: <input id="readerSpeedInput" type="range" min="0" max="100" value="50"/></div>
+      <button id="readerToggleDifficulty">Hide Difficulty</button>
+      <button id="readerToggleCategory">Hide Category</button>
+      <br/>
+      <input type="checkbox" value='multi' name='multi' id='multi'>Multiple Buzzes
+    </div>
+    <div id='questionControl'>
+      <div id='questionBox'>
+        <div id='tournament'></div>
+        <div id='cdWrapper'>
+          <div id='category'></div>
+          <div id='difficulty'></div>
+        </div>
+        <div id='question'>
+          Start reading by pressing space
+        </div>
+        <div id='answer'>
+        </div>
+      </div>
+      <div id='questionControlWrapper'>
+        <button id="startButton">Start Question (Space)</button>
+        <button id="buzzButton">Buzz (Space)</button>
+        <button id="skipButton">Skip (Shift Space)</button>
+        <input id="answerBox"/>
+        <span id="answerNotification"></span>
+      </div>
+    </div>
+  </div>
+</div>

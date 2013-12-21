@@ -2,12 +2,14 @@ var mysql = require('mysql');
 var util = require('../util');
 var sphinx = require('../sphinx');
 var mc = require('../memcached');
+var async = require('async');
 
 var TAG = "SEARCH"
 var MC = util.mc.init(TAG)
 var LOG = util.log(TAG);
 
 var QUERY = "select * from tossup";
+var COUNT = "select 1 as c, count(*), year from tossup";
 
 var defaults = {
   limit : 10,
@@ -15,35 +17,52 @@ var defaults = {
   sort : "year"
 }
 
-var OPTIONS = ['difficulty','category','tournament','question','answer','tossup','year','sort','limit','offset']
+var OPTIONS = ['difficulty','category','tournament','question','answer','tossup','year','sort','limit','offset','term']
 var search = function(options, callback) {
   var query = QUERY;
+  var count = COUNT;
   var args = [];
   var match = "";
   var matchArgs = []
   var other = "";
   var otherArgs = [];
   LOG.d(getKey(options));
+  if (!options["condition"]) {
+    options["condition"] = "answer"
+  }
+  if (!options["term"]) {
+    options["term"] = ""
+  }
   for (var key in options) {
     if (key == "difficulty") {
-      match += "@difficulty ?";
+      match += " @difficulty ?";
       matchArgs.push(options[key]);
     } else if (key == "category") {
-      match += "@category ?";
+      match += " @category \"?\"";
       matchArgs.push(options[key]);
     } else if (key == "tournament") {
-      match += "@tournament ?";
-      matchArgs.push(options[key]);
+      var spl = options[key];
+      var tournament = spl.substring(5);
+      var year = spl.substring(0, 4);
+      other += "year = ?";
+      otherArgs.push(year);
+      match += " @tournament \"?\"";
+      matchArgs.push(tournament);
     } else if (key == "question") {
-      match += "@question ?";
+      match += " @question \"?\"";
       matchArgs.push(options[key]);
-    } else if (key == "answer") {
-      match += "@answer ?";
-      matchArgs.push(options[key]);
-    } else if (key == "tossup") {
-      match += "(@answer ? | @question ?)";
-      matchArgs.push(options[key]);
-      matchArgs.push(options[key]);
+    } else if (key == "condition" && options["term"] != "") {
+      if (options[key] == "answer") {
+          match += " @answer \"?\"";
+          matchArgs.push(options["term"]);
+      } else if (options[key] == "question") {
+          match += " @question \"?\"";
+          matchArgs.push(options["term"]);
+      } else {
+          match += " (@answer \"?\" | @question \"?\")";
+          matchArgs.push(options["term"]);
+          matchArgs.push(options["term"]);
+      }
     } else if (key == "year") {
       other += "year = ?";
       otherArgs.push(options[key]);
@@ -60,12 +79,15 @@ var search = function(options, callback) {
   }
   if (where.length > 0) {
     query += " WHERE " + where.join(" AND ");
+    count += " WHERE " + where.join(" AND ");
   }
+  count += " group by c";
   var sort = options.sort || defaults.sort;
   if (sort == "random") {
     query += " order by rand()";
   } else {
     query += " order by ? desc";
+    count += " order by ? desc";
     args.push(sort);
   }
 
@@ -99,13 +121,41 @@ var search = function(options, callback) {
     delimiter = "&";
   }
   var next = "/services/search" + "";
-  sphinx.query(query, args, function(err, rows) {
-    callback(err, {
-        results : rows,
-        next : "/api/service/search?" + nextstring,
-        previous : "/api/service/search?" + previousstring
-    });
-  });
+  async.parallel([
+    function(callback) {
+      sphinx.query(query, args, function(err, rows) {
+        if (err) {
+            LOG.d(err);
+            callback(err, []);
+            return;
+        }
+        callback(err, {
+            results : rows,
+            next : "/api/service/search?" + nextstring,
+            previous : "/api/service/search?" + previousstring,
+        });
+      });
+    }, function(callback) {
+      sphinx.query(count, args, function(err, rows) {
+        if (err) {
+            callback(err, []);
+            return;
+        }
+        var count = 0;
+        if (rows.length > 0) {
+          count = rows[0]['@count'];
+        }
+        callback(err, count);
+      });
+    }
+  ], function(err, results) {
+    if (err) {
+        callback([]);
+    } else {
+        results[0]['count'] = results[1];
+        callback(err, results[0]);
+    }
+  })
 }
 
 var getKey = function(options) {

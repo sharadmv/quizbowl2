@@ -1,6 +1,6 @@
 (function() {
   var scope = this;
-  var BASE_URL = "/api";
+  var BASE_URL = "/api/service";
 
   $(document).scroll(function() {
     if ($(document).scrollTop() > 60) {
@@ -91,7 +91,6 @@
         this._empty = false;
       },
       add : function(model) {
-        console.log(model);
         var v = new this.View({ model : model });
         this._views[model.id] = v;
         $(this.el).append(v.render().el);
@@ -171,10 +170,6 @@
       var condition = params.condition;
       var random = params.random;
       var limit = params.limit;
-      delete params.term;
-      delete params.condition;
-      delete params.random;
-      delete params.limit;
       var options = {};
       if (condition) {
         options.condition = condition;
@@ -185,7 +180,7 @@
       if (limit) {
         options.limit = limit;
       }
-      results.search(term, options, params);
+      results.search(term, params, {});
     }
   });
   View.ResultControl = Backbone.View.extend({
@@ -197,18 +192,20 @@
       results.bind("add", this.show, this);
     },
     show : function() {
-      var showStr = "Fetched "+ (results.currentPage*results.perPage+1) + "-"+(results.currentPage*results.perPage+results.length)+" results of "+results.count+" in "+(results.elapsed/1000)+" seconds";
+      var showStr = "Fetched "+ (results.currentPage*results.perPage+1) + "-"+(results.currentPage*results.perPage+results.length)+" results of " + results.count + " in "+(results.elapsed/1000)+" seconds";
       this.$(".pages").css("visibility", "visible");
       this.$(".pages").html(showStr);
-      if (results.currentPage == 0) {
+      if (results.currentPage == 0 && results.totalPages == 0) {
+        this.$(".next").css("visibility", "hidden");
         this.$(".previous").css("visibility","hidden");
-        if (results.totalPages > 0) {
-          this.$(".next").css("visibility","visible");
-        }
-      } else if (results.currentPage > 0 && results.currentPage < results.totalPages) {
+      } else if (results.currentPage == 0) {
+        this.$(".next").css("visibility", "visible");
+        this.$(".previous").css("visibility","hidden");
+      } else if (results.currentPage < results.totalPages) {
         this.$(".previous").css("visibility","visible");
         this.$(".next").css("visibility","visible");
       } else {
+        this.$(".previous").css("visibility","visible");
         this.$(".next").css("visibility","hidden");
       }
     },
@@ -238,9 +235,9 @@
       },
 
       paginator_core: {
-        dataType: 'jsonp',
+        dataType: 'json',
         url : function() {
-          return BASE_URL+"/search/"+this.term+"?"+jQuery.param(this._params);
+          return BASE_URL+"/search/?answer="+this.term+"&"+jQuery.param(this._params);
         }
       },
       paginator_ui: {
@@ -256,7 +253,8 @@
         this.count = response.data.count;
         this.totalPages = Math.floor(this.count / this.perPage);
         this.elapsed = response.elapsed;
-        return response.data.tossups;
+        console.log(this.count);
+        return response.data.results;
       },
       search : function(term, options, params) {
         searched = true;
@@ -373,7 +371,6 @@
     update : function() {
       var value = $("#searchBox").val();
       var term = value.split(/[a-zA-Z]+:.*? /);
-      console.log(term);
       term = term[term.length-1];
       var categoryString = this.$("#categorySelect").val();
       var tournamentString = this.$("#tournamentSelect").val();
@@ -394,21 +391,21 @@
     loadTournaments : function(arr) {
       $.each(arr, function(key, val) {
         $("#tournamentSelect").append(
-          "<option>"+val.year+" "+val.tournament+"</option>"
+          "<option>"+val.year+" "+val.name+"</option>"
         );
       });
     },
     loadCategories : function(arr) {
       $.each(arr, function(key, val) {
         $("#categorySelect").append(
-          "<option>"+val+"</option>"
+          "<option>"+val.name+"</option>"
         );
       });
     },
     loadDifficulties : function(arr) {
       $.each(arr, function(key, val) {
         $("#difficultySelect").append(
-          "<option>"+val+"</option>"
+          "<option>"+val.name+"</option>"
         );
       });
     },
